@@ -1,0 +1,68 @@
+spring:
+  profiles: default
+  flyway:
+    enabled: true
+    location: classpath:/db/migration
+    baselineOnMigrate: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    # data base running on AWS and used in test environment
+    #url: jdbc:postgresql://ps-contract.c0riy1xojgsv.eu-west-1.rds.amazonaws.com:5432/ps_test
+    url: jdbc:postgresql://ps-test.c0riy1xojgsv.eu-west-1.rds.amazonaws.com:5432/ps_test
+    username: ps
+    #usernmae: ENC(vAFIafIMNorJGD+wOYicgw==)
+
+    # local database for development environment
+    #url: jdbc:postgresql://localhost:5432/ps
+    #url: jdbc:postgresql://localhost:5433/ps
+    #username: ENC(T2XXHSmzcPwIfZY+gf826/4BiKYQwoAg)
+    password: ENC(nz0CvmfsSb+xI7jKanfKwT8YgX68TW9u)
+
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+    #generate-ddl: true
+    hibernate:
+      # it will be validate after we come to a conclusion about the data models and add sql schema on the db directory
+      ddl-auto: create
+
+  application:
+    name: Contract-service
+#In PROD we are going to change some of this logging levels
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
+      hibernate:
+        sql: INFO
+        type: INFO
+
+server:
+  port: 8181
+elasticsearch:
+  index:
+    type: line_distance
+    name: line_distance
+  #elasticsearch.user.type=user
+  port: 443
+  protocole: https
+  host: search-ps-utv-es-a64micwz4xfe6ayrvdtok7r6tm.eu-west-1.es.amazonaws.com
+#cron:
+  #pattern: 0 0/30 0/23 * * *
+tps:
+  baseUrl: https://tps.ruter.io/api/graphql
+  username: ENC(hgVxc9q4tQT9v+gNFCkGvA==)
+  password: ENC(1JhGTA27C1VYIXwTL26vEw==)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, env, flyway, configprops, metrics, mappings, httptrace
